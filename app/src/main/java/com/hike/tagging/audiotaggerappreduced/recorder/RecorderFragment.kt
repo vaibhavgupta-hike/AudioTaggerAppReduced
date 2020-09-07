@@ -24,14 +24,10 @@ class RecorderFragment : Fragment(), View.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var questionTv: TextView
 
-    private lateinit var deleteBtn: Button
     private lateinit var recordBtn: Button
     private lateinit var submitBtn: Button
 
-    private lateinit var fileNameTv: Button
-
     private val model: RecordViewModel by viewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +50,6 @@ class RecorderFragment : Fragment(), View.OnClickListener {
 
         submitBtn.setOnClickListener(this)
         recordBtn.setOnClickListener(this)
-        deleteBtn.setOnClickListener(this)
-        fileNameTv.setOnClickListener(this)
 
         model.getIsRecording().observe(viewLifecycleOwner, Observer {
             if (it) {
@@ -67,32 +61,18 @@ class RecorderFragment : Fragment(), View.OnClickListener {
 
         model.getRecordFileExists().observe(viewLifecycleOwner, Observer {
             if(it) {
-                deleteBtn.isEnabled = true
-                deleteBtn.background.alpha = 255
-
                 recordBtn.isEnabled = false
                 recordBtn.background.alpha = 255/2
 
                 submitBtn.isEnabled = true
                 submitBtn.background.alpha = 255
 
-                fileNameTv.text = model.getRecordingFileName()
-                fileNameTv.isEnabled = true
-                fileNameTv.background.alpha = 255
-
             } else {
-                deleteBtn.isEnabled = false
-                deleteBtn.background.alpha = 255/2
-
                 recordBtn.isEnabled = true
                 recordBtn.background.alpha = 255
 
                 submitBtn.isEnabled = false
                 submitBtn.background.alpha = 255/2
-
-                fileNameTv.text = getString(R.string.no_file)
-                fileNameTv.isEnabled = false
-                fileNameTv.background.alpha = 255/2
             }
         })
 
