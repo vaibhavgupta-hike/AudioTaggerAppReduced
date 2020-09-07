@@ -55,10 +55,6 @@ class RecordViewModel: ViewModel() {
         }
     }
 
-    fun deleteRecordedFile() {
-        recordFileExists.postValue(false)
-    }
-
     fun submitRecordedFile() {
         val username = User.getUser()?.email
         val questionId = unsubmittedQuestions.get(0)._id

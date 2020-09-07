@@ -51,9 +51,6 @@ class RecorderFragment : Fragment(), View.OnClickListener {
 
         submitBtn = view.findViewById(R.id.submitBtn)
         recordBtn = view.findViewById(R.id.recordBtn)
-        deleteBtn = view.findViewById(R.id.deleteBtn)
-
-        fileNameTv = view.findViewById(R.id.recFileName)
 
         submitBtn.setOnClickListener(this)
         recordBtn.setOnClickListener(this)
@@ -161,9 +158,6 @@ class RecorderFragment : Fragment(), View.OnClickListener {
                     Toast.makeText(context, "Recording failed", Toast.LENGTH_SHORT).show()
                 }
             }
-            R.id.deleteBtn -> {
-                model.deleteRecordedFile()
-            }
             R.id.submitBtn -> {
                 try {
                     model.submitRecordedFile()
@@ -172,12 +166,6 @@ class RecorderFragment : Fragment(), View.OnClickListener {
                 catch (e: Exception) {
                     Toast.makeText(context, "Exception in Submit: " + e.message, Toast.LENGTH_LONG).show()
                 }
-            }
-            R.id.recFileName -> {
-                /*
-                val bundle = bundleOf("filename" to model.getRecordingFileName(), "questionText" to questionTv.text.toString())
-                navController.navigate(R.id.action_recorderFragment_to_audioPlayerFragment, bundle)
-                 */
             }
         }
     }
