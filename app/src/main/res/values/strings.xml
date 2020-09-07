@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">AudioTaggerAppReduced</string>
+    <string name="app_name">AudioTaggerApp</string>
+    <string name="age_range">Age Range</string>
+    <string name="gender">Gender</string>
+    <string name="language">Language</string>
+    <string name="e_mail">E-mail</string>
+    <string name="submit">Submit</string>
+    <string name="hike_email">Hike email</string>
+    <string name="no_file">No File</string>
+    <string name="stop_recording">Stop Recording</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
