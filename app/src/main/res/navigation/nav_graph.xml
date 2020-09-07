@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/googleAuthFragment"
-        android:name="com.hike.tagging.audiotaggerapp.authentication.GoogleAuthFragment"
+        android:name="com.hike.tagging.audiotaggerappreduced.authentication.GoogleAuthFragment"
         android:label="fragment_google_auth"
         tools:layout="@layout/fragment_google_auth">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/recorderFragment"
-        android:name="com.hike.tagging.audiotaggerapp.recorder.RecorderFragment"
+        android:name="com.hike.tagging.audiotaggerappreduced.recorder.RecorderFragment"
         android:label="fragment_recorder"
         tools:layout="@layout/fragment_recorder" />
 
