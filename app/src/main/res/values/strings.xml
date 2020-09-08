@@ -10,4 +10,5 @@
     <string name="stop_recording">Stop Recording</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="instruction_text_fragment_record">Please record an Audio</string>
 </resources>
