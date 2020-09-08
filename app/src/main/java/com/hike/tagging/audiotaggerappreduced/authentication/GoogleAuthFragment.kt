@@ -19,7 +19,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.hike.tagging.audiotaggerappreduced.R
 import com.hike.tagging.audiotaggerappreduced.data.AuthTokenResponse
-import com.hike.tagging.audiotaggerappreduced.data.QueryReponse
+import com.hike.tagging.audiotaggerappreduced.data.QueryResponse
 import com.hike.tagging.audiotaggerappreduced.data.User
 import com.hike.tagging.audiotaggerappreduced.retrofit.RetrofitUtils
 import com.hike.tagging.audiotaggerappreduced.utils.AuthenticationUtils
@@ -122,12 +122,12 @@ class GoogleAuthFragment : Fragment(), View.OnClickListener {
     private fun getUserDetails() {
         val taggerRESTAPIService = RetrofitUtils.getTaggerRestApiClient()
         val call = taggerRESTAPIService.getUserDetails(AuthenticationUtils.clientToken!!)
-        call.enqueue(object: Callback<QueryReponse> {
-            override fun onFailure(call: Call<QueryReponse>, t: Throwable) {
+        call.enqueue(object: Callback<QueryResponse> {
+            override fun onFailure(call: Call<QueryResponse>, t: Throwable) {
                 Toast.makeText(activity?.applicationContext, "Get User Details failed", Toast.LENGTH_SHORT).show()
             }
 
-            override fun onResponse(call: Call<QueryReponse>, response: Response<QueryReponse>) {
+            override fun onResponse(call: Call<QueryResponse>, response: Response<QueryResponse>) {
                 if(response.body()?.isDetailsFilled == true) {
                     initUserDetails()
                     navController.navigate(R.id.action_googleAuthFragment_to_recorderFragment)
