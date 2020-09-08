@@ -7,7 +7,7 @@ object AuthenticationUtils {
     var googleAccount: GoogleSignInAccount? = null
     var clientToken: String? = null
 
-    val defaultAuthToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZhaWJoYXZnQGhpa2UuaW4iLCJpYXQiOjE1OTgyNjQwODZ9.0vCG8fCL-lXfFDvmrSKYv6CEVXVbj_G3cJ5Npur-gCw"
+    val defaultAuthToken = "DgJK3VXQhI97s/mvRToYlmWYdGZtO7DqURw82sru/2U="
     val defaultEmail = "vaibhavg@hike.in"
 
     fun getAuthToken(): String {
