@@ -10,14 +10,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.hike.tagging.audiotaggerappreduced.R
 import com.hike.tagging.audiotaggerappreduced.utils.PermissionUtils
 
 class RecorderFragment : Fragment(), View.OnClickListener {
 
-    private lateinit var navController: NavController
     private lateinit var questionTv: TextView
     private lateinit var recordBtn: Button
 
@@ -36,8 +34,7 @@ class RecorderFragment : Fragment(), View.OnClickListener {
         PermissionUtils.getStorageReadPermission(context, requireActivity())
         PermissionUtils.getStorageWritePermission(context, requireActivity())
 
-        navController = Navigation.findNavController(view)
-        questionTv = view.findViewById<TextView>(R.id.questionTv)
+        questionTv = view.findViewById(R.id.questionTv)
         recordBtn = view.findViewById(R.id.recordBtn)
 
         recordBtn.setOnClickListener(this)
