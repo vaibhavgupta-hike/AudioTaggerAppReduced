@@ -132,7 +132,7 @@ class RecordViewModel: ViewModel() {
         if(unsubmittedQuestions.isEmpty()) {
             val taggerRESTAPIService: TaggerRESTAPIService = RetrofitUtils.getTaggerRestApiClient()
             val userMail = User.getUser()?.email ?: ""
-            val call = taggerRESTAPIService.getUserSpecificQuestions(userMail, AuthenticationUtils.getAuthToken())
+            val call = taggerRESTAPIService.getUserSpecificQuestions(userMail, AuthenticationUtils.clientToken!!)
             call.enqueue(object : Callback<QuestionResponse?> {
 
                 override fun onResponse(call: Call<QuestionResponse?>, response: Response<QuestionResponse?>) {
