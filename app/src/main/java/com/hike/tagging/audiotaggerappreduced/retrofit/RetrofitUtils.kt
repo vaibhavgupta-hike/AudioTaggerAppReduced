@@ -21,7 +21,7 @@ object RetrofitUtils {
             .build()
 
         val builder =
-            Retrofit.Builder().baseUrl("https://voice-tools.hike.in/")
+            Retrofit.Builder().baseUrl("https://voice-tools-stag.hike.in/")
                 .addConverterFactory(GsonConverterFactory.create()).client(okHttpClient)
 
         val retrofit = builder.build()
