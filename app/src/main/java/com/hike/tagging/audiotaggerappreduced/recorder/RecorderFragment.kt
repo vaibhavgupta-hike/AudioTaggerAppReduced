@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -25,7 +24,6 @@ class RecorderFragment : Fragment(), View.OnClickListener {
     private lateinit var questionTv: TextView
 
     private lateinit var recordBtn: Button
-    private lateinit var submitBtn: Button
 
     private val model: RecordViewModel by viewModels()
 
@@ -44,11 +42,8 @@ class RecorderFragment : Fragment(), View.OnClickListener {
 
         navController = Navigation.findNavController(view)
         questionTv = view.findViewById<TextView>(R.id.questionTv)
-
-        submitBtn = view.findViewById(R.id.submitBtn)
         recordBtn = view.findViewById(R.id.recordBtn)
 
-        submitBtn.setOnClickListener(this)
         recordBtn.setOnClickListener(this)
 
         model.getIsRecording().observe(viewLifecycleOwner, Observer {
@@ -60,35 +55,12 @@ class RecorderFragment : Fragment(), View.OnClickListener {
         })
 
         model.getRecordFileExists().observe(viewLifecycleOwner, Observer {
-            if(it) {
+            if (it) {
                 recordBtn.isEnabled = false
-                recordBtn.background.alpha = 255/2
-
-                submitBtn.isEnabled = true
-                submitBtn.background.alpha = 255
-
+                recordBtn.background.alpha = 255 / 2
             } else {
                 recordBtn.isEnabled = true
                 recordBtn.background.alpha = 255
-
-                submitBtn.isEnabled = false
-                submitBtn.background.alpha = 255/2
-            }
-        })
-
-        questionTv.text = model.getQuestionText().value
-
-        model.getQuestionText().observe(viewLifecycleOwner, Observer {
-            questionTv.text = it
-        })
-
-        model.getHasNewUnsubmittedQuestions().observe(viewLifecycleOwner, Observer {
-            if(it) {
-                recordBtn.background.alpha = 255
-                recordBtn.isEnabled = true
-            } else {
-                recordBtn.background.alpha = 255/2
-                recordBtn.isEnabled = false
             }
         })
 
@@ -97,34 +69,57 @@ class RecorderFragment : Fragment(), View.OnClickListener {
 
     private fun getStorageReadPermission(): Boolean {
         val storageReadPermission = Manifest.permission.READ_EXTERNAL_STORAGE
-        if (context?.let { ActivityCompat.checkSelfPermission(it, storageReadPermission) } == PackageManager.PERMISSION_GRANTED) {
+        if (context?.let {
+                ActivityCompat.checkSelfPermission(
+                    it,
+                    storageReadPermission
+                )
+            } == PackageManager.PERMISSION_GRANTED) {
             return true
         } else {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(storageReadPermission), Constants.READ_EXT_STORAGE_PERMISSION_CODE)
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(storageReadPermission),
+                Constants.READ_EXT_STORAGE_PERMISSION_CODE
+            )
             return false
         }
     }
 
     private fun getStorageWritePermission(): Boolean {
         val storageWritePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
-        if (context?.let { ActivityCompat.checkSelfPermission(it, storageWritePermission) } == PackageManager.PERMISSION_GRANTED) {
+        if (context?.let {
+                ActivityCompat.checkSelfPermission(
+                    it,
+                    storageWritePermission
+                )
+            } == PackageManager.PERMISSION_GRANTED) {
             return true
         } else {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(storageWritePermission), Constants.WRITE_EXT_STORAGE_PERMISSION_CODE)
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(storageWritePermission),
+                Constants.WRITE_EXT_STORAGE_PERMISSION_CODE
+            )
             return false
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
     private fun checkAudioPermission(): Boolean {
         val recordPermission = Manifest.permission.RECORD_AUDIO
-        if (context?.let { ActivityCompat.checkSelfPermission(it, recordPermission) } == PackageManager.PERMISSION_GRANTED) {
+        if (context?.let {
+                ActivityCompat.checkSelfPermission(
+                    it,
+                    recordPermission
+                )
+            } == PackageManager.PERMISSION_GRANTED) {
             return true
         } else {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(recordPermission), Constants.RECORD_AUDIO_PERMISSION_CODE)
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(recordPermission),
+                Constants.RECORD_AUDIO_PERMISSION_CODE
+            )
             return false
         }
     }
@@ -133,18 +128,9 @@ class RecorderFragment : Fragment(), View.OnClickListener {
         when (v?.id) {
             R.id.recordBtn -> {
                 try {
-                    if(checkAudioPermission()) model.recordClicked()
-                } catch(e: java.lang.Exception) {
+                    if (checkAudioPermission()) model.recordClicked()
+                } catch (e: java.lang.Exception) {
                     Toast.makeText(context, "Recording failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-            R.id.submitBtn -> {
-                try {
-                    model.submitRecordedFile()
-                    Toast.makeText(context, "Submit completed successfully", Toast.LENGTH_SHORT).show()
-                }
-                catch (e: Exception) {
-                    Toast.makeText(context, "Exception in Submit: " + e.message, Toast.LENGTH_LONG).show()
                 }
             }
         }

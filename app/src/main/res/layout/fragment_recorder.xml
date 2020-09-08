@@ -1,68 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".recorder.RecorderFragment">
 
     <TextView
         android:id="@+id/instructionTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:layout_margin="8dp"
+        android:text="@string/instruction_text_fragment_record"
         android:textAlignment="center"
         android:textFontWeight="700"
-        android:text="Please read the text below"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="8dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scrollbars="vertical"
+        android:layout_margin="16dp"
         android:background="@drawable/stroke_bg"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/instructionTv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@id/recordBtn"
-        android:layout_margin="16dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/instructionTv">
 
         <TextView
             android:id="@+id/questionTv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:padding="8dp"
             android:textAlignment="center"
-            android:textSize="20dp"
-            android:gravity="center"
-            android:layout_gravity="center" />
+            android:textSize="20dp" />
 
     </ScrollView>
 
     <Button
-        android:id="@+id/submitBtn"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Submit"
-        android:textAlignment="center"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-    <Button
         android:id="@+id/recordBtn"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
         android:text="Record"
         android:textAlignment="center"
-        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
