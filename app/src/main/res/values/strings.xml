@@ -13,7 +13,7 @@
     <string name="instruction_text_fragment_record">Please record an Audio</string>
     <string name="record">RECORD</string>
     <string name="recording">RECORDING</string>
-    <string name="uploading">UPLAODING</string>
+    <string name="uploading">UPLOADING</string>
     <string name="upload_failed">UPLOAD FAILED. RETRY</string>
     <string name="retry">RETRY</string>
     <string name="recorder_init_failed">RECORDER INIT FAILED</string>
