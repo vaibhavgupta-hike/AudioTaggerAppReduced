@@ -17,4 +17,8 @@ object AuthenticationUtils {
     fun getEmail(): String {
         return (googleAccount?.email) ?: defaultEmail
     }
+
+    fun isHikeEmail(): Boolean {
+        return (googleAccount?.email?.endsWith("@hike.in")) ?: false
+    }
 }

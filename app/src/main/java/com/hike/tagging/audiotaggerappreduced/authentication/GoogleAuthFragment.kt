@@ -58,7 +58,6 @@ class GoogleAuthFragment : Fragment(), View.OnClickListener {
 
         val gso =
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(clientId)
                 .requestEmail()
                 .build()
         mGoogleSignInClient = context?.let { GoogleSignIn.getClient(it, gso)}
@@ -102,51 +101,17 @@ class GoogleAuthFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun getClientToken() {
-        val taggerRESTAPIService = RetrofitUtils.getTaggerRestApiClient()
-        val call = taggerRESTAPIService.getClientToken(AuthenticationUtils.getAuthToken())
-        call.enqueue(object : Callback<AuthTokenResponse> {
-            override fun onFailure(call: Call<AuthTokenResponse>, t: Throwable) {
-                //Toast.makeText(activity?.applicationContext, "Failure in get client code call", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<AuthTokenResponse>, response: Response<AuthTokenResponse>) {
-                //Toast.makeText(activity?.applicationContext, "Success in get client code call", Toast.LENGTH_SHORT).show()
-                AuthenticationUtils.clientToken = response.body()?.clientToken
-                getUserDetails()
-            }
-
-        })
-    }
-
-    private fun getUserDetails() {
-        val taggerRESTAPIService = RetrofitUtils.getTaggerRestApiClient()
-        val call = taggerRESTAPIService.getUserDetails(AuthenticationUtils.clientToken!!)
-        call.enqueue(object: Callback<QueryResponse> {
-            override fun onFailure(call: Call<QueryResponse>, t: Throwable) {
-                Toast.makeText(activity?.applicationContext, "Get User Details failed", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<QueryResponse>, response: Response<QueryResponse>) {
-                if(response.body()?.isDetailsFilled == true) {
-                    initUserDetails()
-                    navController.navigate(R.id.action_googleAuthFragment_to_recorderFragment)
-                }
-            }
-
-        })
-    }
-
-    private fun initUserDetails() {
-        User.setUser(AuthenticationUtils.getEmail(), "", "", "")
-    }
-
     private fun updateUI(account: GoogleSignInAccount?) {
         if(account == null) {
             Toast.makeText(activity?.applicationContext, "Sign in failed", Toast.LENGTH_SHORT).show()
         } else {
             AuthenticationUtils.googleAccount = account
-            getClientToken()
+            if(AuthenticationUtils.isHikeEmail()) {
+                Toast.makeText(context, "Sign in Suceessful", Toast.LENGTH_SHORT).show()
+                navController.navigate(R.id.action_googleAuthFragment_to_recorderFragment)
+            } else {
+                Toast.makeText(context, "Only Hike email allowed!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
