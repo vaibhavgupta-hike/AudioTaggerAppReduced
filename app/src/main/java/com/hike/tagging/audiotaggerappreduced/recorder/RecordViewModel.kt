@@ -1,11 +1,11 @@
 package com.hike.tagging.audiotaggerappreduced.recorder
 
-import android.icu.text.AlphabeticIndex
 import android.media.MediaRecorder
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hike.tagging.audiotaggerappreduced.data.AuthTokenResponse
 import com.hike.tagging.audiotaggerappreduced.data.RecordingUploadBody
 import com.hike.tagging.audiotaggerappreduced.data.TextResponse
 import com.hike.tagging.audiotaggerappreduced.retrofit.RetrofitUtils
@@ -17,6 +17,7 @@ import retrofit2.Response
 import java.io.File
 import java.io.IOException
 
+
 class RecordViewModel : ViewModel() {
 
     var filePath: String = ""
@@ -24,6 +25,13 @@ class RecordViewModel : ViewModel() {
     private var textFromAudio: MutableLiveData<String> = MutableLiveData("")
     private var recBtnState: MutableLiveData<RecordButtonStates> = MutableLiveData(RecordButtonStates.NOT_RECORDING)
     private var mediaRecorder: MediaRecorder? = null
+
+    private val handler: Handler = Handler(Looper.getMainLooper())
+    private val runnable = Runnable {
+        if(recBtnState.value?.equals(RecordButtonStates.RECORDING) ?: false) {
+            stopRecording()
+        }
+    }
 
     fun getRecordingButtonState(): LiveData<RecordButtonStates> {
         return recBtnState
@@ -65,6 +73,7 @@ class RecordViewModel : ViewModel() {
             recBtnState.postValue(RecordButtonStates.RECORD_FAILED)
             throw Exception("Recording failed")
         }
+        handler.postDelayed(runnable, 15 * 1000)
     }
 
     private fun stopRecording() {
@@ -72,6 +81,7 @@ class RecordViewModel : ViewModel() {
         mediaRecorder?.release()
         mediaRecorder = null
 
+        handler.removeCallbacks(runnable)
         uploadAudio()
     }
 
