@@ -58,6 +58,12 @@ class RecorderFragment : Fragment(), View.OnClickListener {
             questionTv.text = it
         })
 
+        model.getAutoRecStopped().observe(viewLifecycleOwner, Observer {
+            if(it) {
+                Toast.makeText(context, "Auto Stop on Recording. 15 secs. threshold", Toast.LENGTH_LONG).show()
+            }
+        })
+
         model.filePath = activity?.getExternalFilesDir("/")?.absolutePath.toString()
     }
 

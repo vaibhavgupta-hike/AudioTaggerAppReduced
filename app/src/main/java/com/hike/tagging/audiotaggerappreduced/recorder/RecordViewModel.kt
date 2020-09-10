@@ -25,11 +25,13 @@ class RecordViewModel : ViewModel() {
     private var textFromAudio: MutableLiveData<String> = MutableLiveData("")
     private var recBtnState: MutableLiveData<RecordButtonStates> = MutableLiveData(RecordButtonStates.NOT_RECORDING)
     private var mediaRecorder: MediaRecorder? = null
+    private var autoRecStopped: MutableLiveData<Boolean> = MutableLiveData(false)
 
     private val handler: Handler = Handler(Looper.getMainLooper())
     private val runnable = Runnable {
         if(recBtnState.value?.equals(RecordButtonStates.RECORDING) ?: false) {
             stopRecording()
+            autoRecStopped.postValue(true)
         }
     }
 
@@ -39,6 +41,10 @@ class RecordViewModel : ViewModel() {
 
     fun getText(): LiveData<String> {
         return textFromAudio
+    }
+
+    fun getAutoRecStopped(): LiveData<Boolean> {
+        return autoRecStopped
     }
 
     fun getRecordingFileName(): String {
