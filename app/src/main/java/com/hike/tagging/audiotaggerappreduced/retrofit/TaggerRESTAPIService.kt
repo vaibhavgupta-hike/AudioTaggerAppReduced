@@ -29,8 +29,9 @@ interface TaggerRESTAPIService {
     @POST("/auth")
     fun getClientToken(@Header("Authorization") authToken: String): Call<AuthTokenResponse>
 
-    @GET("/voice-to-text")
+    @POST("/voice-to-text")
     fun getTextForAudio(@Header("Authorization") authToken: String,
-                        @Body recUploadBody: RecordingUploadBody): Call<TextResponse>
+                        @Body recUploadBody: RecordingUploadBody,
+                        @Header("Content-Type") contentType: String = "application/json"): Call<TextResponse>
 
 }

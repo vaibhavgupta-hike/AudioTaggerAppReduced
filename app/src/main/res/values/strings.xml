@@ -11,4 +11,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="instruction_text_fragment_record">Please record an Audio</string>
+    <string name="record">RECORD</string>
+    <string name="recording">RECORDING</string>
+    <string name="uploading">UPLAODING</string>
+    <string name="upload_failed">UPLOAD FAILED. RETRY</string>
+    <string name="retry">RETRY</string>
+    <string name="recorder_init_failed">RECORDER INIT FAILED</string>
+    <string name="retry_record">RETRY RECORD</string>
 </resources>

@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import com.hike.tagging.audiotaggerappreduced.R
 import com.hike.tagging.audiotaggerappreduced.utils.PermissionUtils
 
@@ -39,22 +38,24 @@ class RecorderFragment : Fragment(), View.OnClickListener {
 
         recordBtn.setOnClickListener(this)
 
-        model.getIsRecording().observe(viewLifecycleOwner, Observer {
-            if (it) {
-                recordBtn.text = "Stop Recording"
-            } else {
-                recordBtn.text = "Record"
+        model.getRecordingButtonState().observe(viewLifecycleOwner, Observer {
+            when(it) {
+                RecordButtonStates.NOT_RECORDING -> recordBtn.text = getString(R.string.record)
+                RecordButtonStates.RECORD_FAILED -> {
+                    Toast.makeText(context, getString(R.string.recorder_init_failed), Toast.LENGTH_SHORT).show()
+                    recordBtn.text = getString(R.string.retry_record)
+                }
+                RecordButtonStates.RECORDING -> recordBtn.text = getString(R.string.recording)
+                RecordButtonStates.UPLOADING -> recordBtn.text = getString(R.string.uploading)
+                RecordButtonStates.UPLOAD_FAIL -> {
+                    Toast.makeText(context, getString(R.string.upload_failed), Toast.LENGTH_SHORT).show()
+                    recordBtn.text = getString(R.string.retry)
+                }
             }
         })
 
-        model.getRecordFileExists().observe(viewLifecycleOwner, Observer {
-            if (it) {
-                recordBtn.isEnabled = false
-                recordBtn.background.alpha = 255 / 2
-            } else {
-                recordBtn.isEnabled = true
-                recordBtn.background.alpha = 255
-            }
+        model.getText().observe(viewLifecycleOwner, Observer {
+            questionTv.text = it
         })
 
         model.filePath = activity?.getExternalFilesDir("/")?.absolutePath.toString()

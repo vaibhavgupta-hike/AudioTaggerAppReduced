@@ -1,26 +1,36 @@
 package com.hike.tagging.audiotaggerappreduced.recorder
 
+import android.icu.text.AlphabeticIndex
 import android.media.MediaRecorder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hike.tagging.audiotaggerappreduced.data.AuthTokenResponse
+import com.hike.tagging.audiotaggerappreduced.data.RecordingUploadBody
+import com.hike.tagging.audiotaggerappreduced.data.TextResponse
+import com.hike.tagging.audiotaggerappreduced.retrofit.RetrofitUtils
+import com.hike.tagging.audiotaggerappreduced.utils.AuthenticationUtils
 import com.hike.tagging.audiotaggerappreduced.utils.RecorderUtils
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
 class RecordViewModel : ViewModel() {
 
     var filePath: String = ""
 
-    private var isRecording: MutableLiveData<Boolean> = MutableLiveData(false)
-    private var recordFileExists: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var textFromAudio: MutableLiveData<String> = MutableLiveData("")
+    private var recBtnState: MutableLiveData<RecordButtonStates> = MutableLiveData(RecordButtonStates.NOT_RECORDING)
     private var mediaRecorder: MediaRecorder? = null
 
-    fun getIsRecording(): LiveData<Boolean> {
-        return isRecording
+    fun getRecordingButtonState(): LiveData<RecordButtonStates> {
+        return recBtnState
     }
 
-    fun getRecordFileExists(): LiveData<Boolean> {
-        return recordFileExists
+    fun getText(): LiveData<String> {
+        return textFromAudio
     }
 
     fun getRecordingFileName(): String {
@@ -28,17 +38,16 @@ class RecordViewModel : ViewModel() {
     }
 
     fun recordClicked() {
-        if (isRecording.value == true) {
-            stopRecording()
-        } else {
-            startRecording()
+        when(recBtnState.value) {
+            RecordButtonStates.NOT_RECORDING -> startRecording()
+            RecordButtonStates.RECORD_FAILED -> startRecording()
+            RecordButtonStates.RECORDING -> stopRecording()
+            RecordButtonStates.UPLOADING -> { /* This should never happen */ }
+            RecordButtonStates.UPLOAD_FAIL -> uploadAudio()
         }
     }
 
     private fun startRecording() {
-        isRecording.postValue(true)
-
-        //Setup Media Recorder for recording
         mediaRecorder = MediaRecorder()
         mediaRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
         mediaRecorder?.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
@@ -50,7 +59,10 @@ class RecordViewModel : ViewModel() {
         try {
             mediaRecorder?.prepare()
             mediaRecorder?.start()
+
+            recBtnState.postValue(RecordButtonStates.RECORDING)
         } catch (e: IOException) {
+            recBtnState.postValue(RecordButtonStates.RECORD_FAILED)
             throw Exception("Recording failed")
         }
     }
@@ -60,8 +72,27 @@ class RecordViewModel : ViewModel() {
         mediaRecorder?.release()
         mediaRecorder = null
 
-        isRecording.postValue(false)
-        recordFileExists.postValue(true)
+        uploadAudio()
+    }
+
+    private fun uploadAudio() {
+        val taggerRESTAPIService = RetrofitUtils.getTaggerRestApiClient()
+        val file = File(filePath + "/" + getRecordingFileName())
+        val recUploadBody = RecordingUploadBody(file)
+        recBtnState.postValue(RecordButtonStates.UPLOADING)
+        val call = taggerRESTAPIService.getTextForAudio(AuthenticationUtils.getAuthToken(), recUploadBody)
+        call.enqueue(object : Callback<TextResponse> {
+            override fun onFailure(call: Call<TextResponse>, t: Throwable) {
+                textFromAudio.postValue("( Failed to Upload Audio )")
+                recBtnState.postValue(RecordButtonStates.UPLOAD_FAIL)
+            }
+
+            override fun onResponse(call: Call<TextResponse>, response: Response<TextResponse>) {
+                textFromAudio.postValue(response.body()?.text)
+                recBtnState.postValue(RecordButtonStates.NOT_RECORDING)
+            }
+
+        })
     }
 
 }
